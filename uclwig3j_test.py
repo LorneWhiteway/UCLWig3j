@@ -2,16 +2,16 @@
 
 
 
-# Returns 3j(j, j1, j2, 0, m, -m) (calculated using uclwig3j).
-def uclwig3j_wrapper(j, j1, j2, m):
+# Returns 3j(j1, j2, j, m, -m, 0) (calculated using uclwig3j).
+def uclwig3j_wrapper(j1, j2, j, m):
     import subprocess
-    return float(subprocess.check_output(["./uclwig3j", str(j), str(j1), str(j2), str(m)]))
+    return float(subprocess.check_output(["./uclwig3j", str(j1), str(j2), str(j), str(m)]))
 
     
-# Returns 3j(j, j1, j2, 0, m, -m) (calculated using wigxjpf).
-def wigxjpf_wrapper(j, j1, j2, m):
+# Returns 3j(j1, j2, j, m, -m, 0) (calculated using wigxjpf).
+def wigxjpf_wrapper(j1, j2, j, m):
     import subprocess
-    cmd = "--3j=" + str(j) + "," + str(j1) + "," + str(j2) + "," + str(0) + "," + str(m) + "," + str(-m)
+    cmd = "--3j=" + str(j1) + "," + str(j2) + "," + str(j) + "," + str(m) + "," + str(-m) + "," + str(0)
     string_data = subprocess.check_output(["../wigxjpf-1.7/bin/wigxjpf", cmd])
     # TODO: Add error check on return.
     string_data = string_data.replace("trivially", "")
@@ -26,7 +26,7 @@ def generate_test_cases(maxj12, f_handle):
                 j_max = max(j1, j2)
                 j_min = min(j1, j2)
                 for j in range(j_max - j_min, j_max + j_min + 1):
-                    f_handle.write(str(j) + "," + str(j1) + "," + str(j2) + "," + str(m) + "," + "%.18e"%wigxjpf_wrapper(j, j1, j2, m) + "\n")
+                    f_handle.write(str(j1) + "," + str(j2) + "," + str(j) + "," + str(m) + "," + str(-m) + "," + str(0) + "," + "%.18e"%wigxjpf_wrapper(j1, j2, j, m) + "\n")
 
                     
                     
@@ -41,7 +41,7 @@ def generate_random_test_cases(num_cases, maxj12, f_handle):
         j_min = min(j1, j2)
         j = random.randrange(j_max - j_min, j_max + j_min + 1)
         m = random.choice((0, 2))
-        f_handle.write(str(j) + "," + str(j1) + "," + str(j2) + "," + str(m) + "," + "%.18e" % wigxjpf_wrapper(j, j1, j2, m) + "\n")
+        f_handle.write(str(j1) + "," + str(j2) + "," + str(j) + "," + str(m) + "," + str(-m) + "," + str(0) + "," + "%.18e" % wigxjpf_wrapper(j1, j2, j, m) + "\n")
     
     
 def test_file_name():
@@ -54,10 +54,10 @@ def generate_all_test_cases():
         generate_random_test_cases(20000, 10000, f_handle)
         
 
-# Assumes that parameter_tuple is an 8-tuple containing: j, j1, j2, m, correct wig3j, our calculated wig3j, absolute error, percentage error.
+# Assumes that parameter_tuple is an 8-tuple containing: j1, j2, j, m, correct wig3j, our calculated wig3j, absolute error, percentage error.
 def parameters_to_str(parameter_tuple):
     
-    return "j = " + str(parameter_tuple[0]) + "; j1 = " + str(parameter_tuple[1]) + "; j2 = " + str(parameter_tuple[2]) + "; m = " + str(parameter_tuple[3]) + "; correct wig3j = " + "{0:.17e}".format(parameter_tuple[4]) + "; our calculated wig3j = " + "{0:.17e}".format(parameter_tuple[5]) + "; absolute error = " + str(parameter_tuple[6]) + "; percentage error = " + str(parameter_tuple[7])
+    return "j1 = " + str(parameter_tuple[0]) + "; j2 = " + str(parameter_tuple[1]) + "; j = " + str(parameter_tuple[2]) + "; m = " + str(parameter_tuple[3]) + "; correct wig3j = " + "{0:.17e}".format(parameter_tuple[4]) + "; our calculated wig3j = " + "{0:.17e}".format(parameter_tuple[5]) + "; absolute error = " + str(parameter_tuple[6]) + "; percentage error = " + str(parameter_tuple[7])
 
       
         
@@ -70,17 +70,17 @@ def run_all_test_cases():
     with open(test_file_name(), "r") as f_handle:
         for line in f_handle:
             arr = line.split(",")
-            j = int(arr[0])
-            j1 = int(arr[1])
-            j2 = int(arr[2])
+            j1 = int(arr[0])
+            j2 = int(arr[1])
+            j = int(arr[2])
             m = int(arr[3])
-            correct_wig3j = float(arr[4])
-            our_calculated_wig3y = uclwig3j_wrapper(j, j1, j2, m)
+            correct_wig3j = float(arr[6])
+            our_calculated_wig3y = uclwig3j_wrapper(j1, j2, j, m)
             
             absolute_error = abs(our_calculated_wig3y - correct_wig3j)
             percentage_error = abs(our_calculated_wig3y/correct_wig3j - 1.0) if (correct_wig3j != 0.0) else 0.0
             
-            this_trial = (j, j1, j2, m, correct_wig3j, our_calculated_wig3y, absolute_error, percentage_error)
+            this_trial = (j1, j2, j, m, correct_wig3j, our_calculated_wig3y, absolute_error, percentage_error)
             
             if absolute_error > max_absolute_error[6]:
                 max_absolute_error = this_trial

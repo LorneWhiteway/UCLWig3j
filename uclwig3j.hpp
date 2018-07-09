@@ -5,7 +5,7 @@
 
 namespace uclwig3j {
 
-	// Calculates (j j1 j2 0 m -m) in this starting case in which j=abs(j1-j2).
+	// Calculates wig3j(j1, j2, j, m, -m, 0) in this starting case in which j=abs(j1-j2).
 	// See my notes p. E20 for the m = 0 case.
 	double initial_value(unsigned int j12_max, unsigned int j12_min, unsigned int m) {
 		
@@ -52,7 +52,7 @@ namespace uclwig3j {
 		}
 		else {
 			if (j12_diff == 0) {
-				// Calculate (1 j1 j1 0 2 -2) - The general formula doesn't work here. See p. 60 for explanation, and p. 63 for the required formula.
+				// Calculate wig3j(j1, j2, 1, 2, -2, 0) - The general formula doesn't work here. See p. 60 for explanation, and p. 63 for the required formula.
 				if (j12_max == 1) {
 					return 0.0;
 				}
@@ -67,7 +67,6 @@ namespace uclwig3j {
 			}
 		}
 	}
-
 
 
 	// it_begin should point to the start of a container of doubles of the correct size (which is 2 * min(j1, j2) + 1).
