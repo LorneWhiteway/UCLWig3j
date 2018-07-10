@@ -18,7 +18,7 @@ If you do not need to run the test cases, then there is nothing more to do. The 
 
 To use the function in your C++ code:
 1. Include the header file `uclwig3j.hpp`.
-1. Allocate space for `2*min(j1, j2) + 1` doubles. The allocated space may be an array of doubles, or a std::vector<double>, or any other suitable container. The set it_begin` to be an iterator (or pointer) pointing to the beginning of the allocated space.
+1. Allocate space for `2*min(j1, j2) + 1` doubles. The allocated space may be an array of doubles, or a std::vector<double>, or any other suitable container. The set `it_begin` to be an iterator (or pointer) pointing to the beginning of the allocated space.
 1. Call `uclwig3j` with inputs j1, j2 and m (all unsigned ints) followed by it_begin. The function will fill the container with the values wig3j(j1, j2, j, m, -m, 0) for |j1-j2| <= j <= j1+j2.
 
 Example 1 (using an array of doubles)
