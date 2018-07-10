@@ -27,7 +27,7 @@ Example 1 (using an array of doubles)
 #include uclwig3j.hpp
 unsigned int j1 = 300;
 unsigned int j2 = 200;
-unsigned m = 2;
+unsigned int m = 2;
 
 double* array = new double[2 * ((j1 < j2) ? j1 : j2) + 1]; // Remember that this will need to be freed at some time.
 uclwig3j::uclwig3j(j1, j2, m, array);
@@ -39,7 +39,7 @@ Example 2 (using a std::vector)
 #include <vector>
 unsigned int j1 = 300;
 unsigned int j2 = 200;
-unsigned m = 2;
+unsigned int m = 2;
 
 std::vector<double> array(2 * ((j1 < j2) ? j1 : j2) + 1);
 uclwig3j::uclwig3j(j1, j2, m, array.begin());
