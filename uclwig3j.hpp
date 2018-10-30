@@ -7,13 +7,13 @@ namespace uclwig3j {
 
 	// Calculates wig3j(j1, j2, j, m, -m, 0) in this starting case in which j=abs(j1-j2).
 	// See my notes p. E20 for the m = 0 case.
-	double initial_value(unsigned int j12_max, unsigned int j12_min, unsigned int m) {
+	template <class Iter> void initial_value(unsigned int j12_max, unsigned int j12_min, unsigned int m, Iter target) {
 		
 		unsigned int j12_diff = j12_max - j12_min;
 		
 		// Special case. See my notes p. 68
 		if (m == 2 && j12_min < 2) {
-			return 0.0;
+			*target = 0.0;
 		}
 		else {
 			double sym_3j = 1.0;
@@ -38,32 +38,32 @@ namespace uclwig3j {
 			// Set the sign.
 			sym_3j *= ((j12_max % 2 == 0) ? 1.0 : -1.0);
 			
-			return sym_3j;
+			*target = sym_3j;
 		}
 		
 	}
 
-	double second_value(unsigned int j12_max, unsigned int j12_min, unsigned int m, double initial_value) {
+	template <class Iter> void second_value(unsigned int j12_max, unsigned int j12_min, unsigned int m, double initial_value, Iter target) {
 		
 		unsigned int j12_diff = j12_max - j12_min;
 		
 		if (m == 0) {
-			return 0.0;
+			*target = 0.0;
 		}
 		else {
 			if (j12_diff == 0) {
 				// Calculate wig3j(j1, j2, 1, 2, -2, 0) - The general formula doesn't work here. See p. 60 for explanation, and p. 63 for the required formula.
 				if (j12_max == 1) {
-					return 0.0;
+					*target =  0.0;
 				}
 				else {
 					// By chance this formula works for j12_max = 2 as well as for j12_max > 2 (different derivations of the formula required in these two cases. See p. 65.)
-					return ((j12_max % 2 == 0) ? 1.0 : -1.0) * 2.0 / std::sqrt(j12_max * (j12_max + 1.0) * (2.0 * j12_max + 1.0));
+					*target =  ((j12_max % 2 == 0) ? 1.0 : -1.0) * 2.0 / std::sqrt(j12_max * (j12_max + 1.0) * (2.0 * j12_max + 1.0));
 				}
 			}
 			else {
 				// See p. 81.
-				return initial_value * 2.0 * std::sqrt((2.0 * j12_diff + 1.0) / (j12_min * (j12_max + 1.0)));
+				*target =  initial_value * 2.0 * std::sqrt((2.0 * j12_diff + 1.0) / (j12_min * (j12_max + 1.0)));
 			}
 		}
 	}
@@ -86,7 +86,8 @@ namespace uclwig3j {
 		if (m == 0) {
 			
 			unsigned int j = j12_diff;
-			double sym_3j = initial_value(j12_max, j12_min, m);
+			double sym_3j;
+			initial_value(j12_max, j12_min, m, &sym_3j);
 			
 			*(it++) = sym_3j;
 			j += 2;
@@ -109,11 +110,12 @@ namespace uclwig3j {
 		else {
 
 			// First value:
-			double starting_value = initial_value(j12_max, j12_min, m);
+			double starting_value;
+			initial_value(j12_max, j12_min, m, &starting_value);
 			*(it++) = starting_value;
 			// Second value:
 			if (j12_min > 0) {
-				*(it++) = second_value(j12_max, j12_min, m, starting_value);
+				second_value(j12_max, j12_min, m, starting_value, it++);
 			}
 			// Third and remaining values:
 			for (unsigned int j = j12_diff + 2; j <= j12_sum; ++j /*'it' is incremented in the loop body*/) {
