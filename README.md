@@ -18,7 +18,7 @@ If you do not need to run the test cases, then there is nothing more to do. The 
 
 To use the function in your C++ code:
 1. Include the header file `uclwig3j.hpp`.
-1. Allocate space for `2*min(j1, j2) + 1` doubles. The allocated space may be an array of doubles, or a std::vector<double>, or any other suitable container. The set `it_begin` to be an iterator (or pointer) pointing to the beginning of the allocated space.
+1. Allocate space for `2*min(j1, j2) + 1` doubles. The allocated space may be an array of doubles, or a std::vector<double>, or any other suitable container. Then set `it_begin` to be an iterator (or pointer) pointing to the beginning of the allocated space.
 1. Call `uclwig3j` with inputs j1, j2 and m (all unsigned ints) followed by it_begin. The function will fill the container with the values wig3j(j1, j2, j, m, -m, 0) for |j1-j2| <= j <= j1+j2.
 
 Example 1 (using an array of doubles)
@@ -49,11 +49,11 @@ uclwig3j::uclwig3j(j1, j2, m, array.begin());
 
 To run the test code:
 1. Call `make`; this will build an executable `uclwig3j`. (If you want to call this executable directly yourself, then pass on the command line either `j1 j2 j m` (in which case the function will return wig3j(j1, j2, j, m, -m, 0)) or `j1 j2 m` (in which case the function will return a complete list of j and wig3j(j1, j2, j, m, -m, 0) values as well as information on how long the calculation took.)
-2. Call the Python 2 module `uclwig3j_test.py` with the command line parameter `run`. This will read the provided file 'uclwig3j_test.txt' (which contains precomputed correct values for wig3j, calculated using wigxjpf (see http://fy.chalmers.se/subatom/wigxjpf/)) and then summarise the maximum absolute error and maximum percentage error between the correct values and the uclwig3j values.
+2. Call the Python 2 module `test_uclwig3j.py` with the command line parameter `run`. This will read the provided file 'test_uclwig3j.txt' (which contains precomputed correct values for wig3j, calculated using wigxjpf (see http://fy.chalmers.se/subatom/wigxjpf/)) and then summarise the maximum absolute error and maximum percentage error between the correct values and the uclwig3j values.
 
 ## Test results
 
-Currently the test file 'uclwig3j_test.txt' contains:
+Currently the test file 'test_uclwig3j.txt' contains:
 * test cases for all wig3j(j1, j2, j, m, -m, 0) in which j1 <= 25, j2 <= 25, j is in the relevant range, and m = 0 or 2. 
 * 20,000 further randomly chosen test cases in which j1 <= 10,000, j2 <= 10,000, j is in the relevant range, and m = 0 or 2.
 
