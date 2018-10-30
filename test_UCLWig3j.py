@@ -2,10 +2,10 @@
 
 
 
-# Returns 3j(j1, j2, j, m, -m, 0) (calculated using UCLWig3j).
+# Returns 3j(j1, j2, j, m, -m, 0) (calculated using run_UCLWig3j).
 def UCLWig3j_wrapper(j1, j2, j, m):
     import subprocess
-    return float(subprocess.check_output(["./UCLWig3j", str(j1), str(j2), str(j), str(m)]))
+    return float(subprocess.check_output(["./run_UCLWig3j", str(j1), str(j2), str(j), str(m)]))
 
     
 # Returns 3j(j1, j2, j, m, -m, 0) (calculated using wigxjpf).
