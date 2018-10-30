@@ -12,7 +12,7 @@ The expected use case for this code is as described in Appendix A of https://arx
 
 ## Installation
 
-Begin by cloning the repository at https://github.com/Astrophysics-UCL/uclwig3j.git; this will create a directory `uclwig3j`.
+Begin by cloning the repository at https://github.com/Astrophysics-UCL/UCLWig3j.git; this will create a directory `UCLWig3j`.
 
 If you do not need to run the test cases, then there is nothing more to do. The directory contains a C++ header file `UCLWig3j.hpp` that can be included in your code. This header file contains a namespace `UCLWig3j` in which there is a function also called `UCLWig3j`.
 
