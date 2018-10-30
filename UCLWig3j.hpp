@@ -3,11 +3,13 @@
 
 #include <cmath>
 
-namespace UCLWig3j {
+// Comments below refer to 'my notes'; contact lorne.whiteway@star.ucl.ac.uk to see these.
+
+namespace uclwig3j {
 
     // Calculates wig3j(j1, j2, j, m, -m, 0) in this starting case in which j=abs(j1-j2).
     // See my notes p. E20 for the m = 0 case.
-    template <class Iter> void initial_value(unsigned int j12_max, unsigned int j12_min, unsigned int m, Iter target) {
+    template <class TIter> void initial_value(unsigned int j12_max, unsigned int j12_min, unsigned int m, TIter target) {
         
         unsigned int j12_diff = j12_max - j12_min;
         
@@ -43,7 +45,7 @@ namespace UCLWig3j {
         
     }
 
-    template <class Iter> void second_value(unsigned int j12_max, unsigned int j12_min, unsigned int m, double initial_value, Iter target) {
+    template <class TIter> void second_value(unsigned int j12_max, unsigned int j12_min, unsigned int m, double initial_value, TIter target) {
         
         unsigned int j12_diff = j12_max - j12_min;
         
@@ -70,7 +72,7 @@ namespace UCLWig3j {
 
 
     // it_begin should point to the start of a container of doubles of the correct size (which is 2 * min(j1, j2) + 1).
-    template <class Iter> void UCLWig3j(unsigned int j1, unsigned int j2, unsigned int m, Iter it_begin) {
+    template <class TIter> void uclwig3j(unsigned int j1, unsigned int j2, unsigned int m, TIter it_begin) {
         
         if (m != 0 && m != 2) {
             throw "m must be zero or two";
@@ -81,7 +83,7 @@ namespace UCLWig3j {
         unsigned int j12_sum = j12_max + j12_min;
         unsigned int j12_diff = j12_max - j12_min;
         
-        Iter it = it_begin;
+        TIter it = it_begin;
         
         if (m == 0) {
             
