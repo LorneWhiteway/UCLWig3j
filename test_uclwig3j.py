@@ -59,6 +59,18 @@ def parameters_to_str(parameter_tuple):
     
     return "j1 = " + str(parameter_tuple[0]) + "; j2 = " + str(parameter_tuple[1]) + "; j = " + str(parameter_tuple[2]) + "; m = " + str(parameter_tuple[3]) + "; correct wig3j = " + "{0:.17e}".format(parameter_tuple[4]) + "; our calculated wig3j = " + "{0:.17e}".format(parameter_tuple[5]) + "; absolute error = " + str(parameter_tuple[6]) + "; percentage error = " + str(parameter_tuple[7])
 
+
+# From https://stackoverflow.com/questions/845058
+def lines_in_file(filename):
+    with open(filename, "r") as f_handle:
+        lines = 0
+        buf_size = 1024 * 1024
+        read_f = f_handle.read # loop optimization
+        buf = read_f(buf_size)
+        while buf:
+            lines += buf.count('\n')
+            buf = read_f(buf_size)
+    return lines
       
         
 def run_all_test_cases():
@@ -66,6 +78,13 @@ def run_all_test_cases():
     max_absolute_error = (0, 0, 0, 0, 0, 0, 0, 0.0)
     max_percentage_error = (0, 0, 0, 0, 0, 0, 0, 0.0)
     max_absolute_error_when_correct_value_is_zero = (0, 0, 0, 0, 0, 0, 0, 0.0)
+    
+    print "Running..."
+    
+    # To provide a running status update
+    lines = lines_in_file(test_file_name())
+    lines_read = 0
+    old_percentage_read = -1
     
     with open(test_file_name(), "r") as f_handle:
         for line in f_handle:
@@ -90,7 +109,17 @@ def run_all_test_cases():
                 
             if correct_wig3j == 0.0 and absolute_error > max_absolute_error_when_correct_value_is_zero[6]:
                 max_absolute_error_when_correct_value_is_zero = this_trial
+            
+            # To provide a running status update
+            lines_read += 1
+            percentage_read = int(100.0 * lines_read / float(lines))
+            if (percentage_read > old_percentage_read):
+                sys.stdout.write("\r" + "X" * percentage_read + "." * (100 - percentage_read))
+                sys.stdout.flush()
+                old_percentage_read = percentage_read
+            
                 
+    print "\n"
     
     print "Maximum absolute error:"
     print parameters_to_str(max_absolute_error)
