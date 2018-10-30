@@ -2,10 +2,10 @@
 
 
 
-# Returns 3j(j1, j2, j, m, -m, 0) (calculated using uclwig3j).
-def uclwig3j_wrapper(j1, j2, j, m):
+# Returns 3j(j1, j2, j, m, -m, 0) (calculated using UCLWig3j).
+def UCLWig3j_wrapper(j1, j2, j, m):
     import subprocess
-    return float(subprocess.check_output(["./uclwig3j", str(j1), str(j2), str(j), str(m)]))
+    return float(subprocess.check_output(["./UCLWig3j", str(j1), str(j2), str(j), str(m)]))
 
     
 # Returns 3j(j1, j2, j, m, -m, 0) (calculated using wigxjpf).
@@ -45,7 +45,7 @@ def generate_random_test_cases(num_cases, maxj12, f_handle):
     
     
 def test_file_name():
-    return "./test_uclwig3j.txt"
+    return "./test_UCLWig3j.txt"
     
     
 def generate_all_test_cases():
@@ -94,7 +94,7 @@ def run_all_test_cases():
             j = int(arr[2])
             m = int(arr[3])
             correct_wig3j = float(arr[6])
-            our_calculated_wig3y = uclwig3j_wrapper(j1, j2, j, m)
+            our_calculated_wig3y = UCLWig3j_wrapper(j1, j2, j, m)
             
             absolute_error = abs(our_calculated_wig3y - correct_wig3j)
             percentage_error = abs(our_calculated_wig3y/correct_wig3j - 1.0) if (correct_wig3j != 0.0) else 0.0
@@ -142,7 +142,7 @@ if __name__ == "__main__":
 
     import sys
     
-    usage_string = "Usage: 'test_uclwig3j.py generate' or 'test_uclwig3j.py run'"
+    usage_string = "Usage: 'test_UCLWig3j.py generate' or 'test_UCLWig3j.py run'"
     
     if len(sys.argv) != 2:
         print usage_string

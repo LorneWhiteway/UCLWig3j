@@ -1,10 +1,10 @@
 
-uclwig3j : uclwig3j.o 
-	${CXX} -lm -o uclwig3j uclwig3j.o
+UCLWig3j : UCLWig3j.o 
+	${CXX} -lm -o UCLWig3j UCLWig3j.o
 
-uclwig3j.o: uclwig3j.cpp uclwig3j.hpp
-	${CXX} -std=c++11 -c -o uclwig3j.o uclwig3j.cpp
+UCLWig3j.o: UCLWig3j.cpp UCLWig3j.hpp
+	${CXX} -std=c++11 -c -o UCLWig3j.o UCLWig3j.cpp
  
 clean: 
-	rm -f uclwig3j
-	rm -f uclwig3j.o 
+	rm -f UCLWig3j
+	rm -f UCLWig3j.o 

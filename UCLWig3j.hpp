@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-namespace uclwig3j {
+namespace UCLWig3j {
 
     // Calculates wig3j(j1, j2, j, m, -m, 0) in this starting case in which j=abs(j1-j2).
     // See my notes p. E20 for the m = 0 case.
@@ -70,7 +70,7 @@ namespace uclwig3j {
 
 
     // it_begin should point to the start of a container of doubles of the correct size (which is 2 * min(j1, j2) + 1).
-    template <class Iter> void uclwig3j(unsigned int j1, unsigned int j2, unsigned int m, Iter it_begin) {
+    template <class Iter> void UCLWig3j(unsigned int j1, unsigned int j2, unsigned int m, Iter it_begin) {
         
         if (m != 0 && m != 2) {
             throw "m must be zero or two";

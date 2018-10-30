@@ -4,7 +4,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "uclwig3j.hpp"
+#include "UCLWig3j.hpp"
 
 int main(int argc, char** argv) {
 	
@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
 			
 			std::vector<double> val_array(2 * j12_min + 1);
 			auto start = std::chrono::high_resolution_clock::now();
-			uclwig3j::uclwig3j(j1, j2, m, val_array.begin());
+			UCLWig3j::UCLWig3j(j1, j2, m, val_array.begin());
 			auto  stop = std::chrono::high_resolution_clock::now();
 			unsigned int j = (j1 < j2) ? j2 - j1 : j1 - j2;
 			for (std::vector<double>::const_iterator cit = val_array.begin(); cit != val_array.end(); ++cit, ++j) {
@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
 			}
 			else {
 				std::vector<double> val_array(2 * j12_min + 1);
-				uclwig3j::uclwig3j(j1, j2, m, val_array.begin());
+				UCLWig3j::UCLWig3j(j1, j2, m, val_array.begin());
 				double wig3j = val_array[j - (j12_max - j12_min)]; // A bit wasteful as we only pick out one value from the whole array returned!
 				std::cout << std::scientific << std::setprecision(16) << wig3j << std::endl;
 			}
