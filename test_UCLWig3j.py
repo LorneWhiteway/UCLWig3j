@@ -1,25 +1,32 @@
 #!/usr/bin/env python
 
 
+""" 
+    Routines for testing UCLWig3j results. See README.md for more details.
+    Author: Lorne Whiteway.
+"""
+
+
+import subprocess
+import random
+import sys
+
 
 # Returns 3j(j1, j2, j, m, -m, 0) (calculated using run_UCLWig3j).
 def UCLWig3j_wrapper(j1, j2, j, m):
-    import subprocess
     return float(subprocess.check_output(["./run_UCLWig3j", str(j1), str(j2), str(j), str(m)]))
 
-    
+
 # Returns 3j(j1, j2, j, m, -m, 0) (calculated using wigxjpf).
 def wigxjpf_wrapper(j1, j2, j, m):
-    import subprocess
     cmd = "--3j=" + str(j1) + "," + str(j2) + "," + str(j) + "," + str(m) + "," + str(-m) + "," + str(0)
     string_data = subprocess.check_output(["../wigxjpf-1.7/bin/wigxjpf", cmd])
     # TODO: Add error check on return.
     string_data = string_data.replace("trivially", "")
     return float(string_data.split("=")[1])
-    
+
 
 def generate_test_cases(maxj12, f_handle):
-
     for m in [0, 2]:
         for j1 in range(maxj12):
             for j2 in range(maxj12):
@@ -28,12 +35,8 @@ def generate_test_cases(maxj12, f_handle):
                 for j in range(j_max - j_min, j_max + j_min + 1):
                     f_handle.write(str(j1) + "," + str(j2) + "," + str(j) + "," + str(m) + "," + str(-m) + "," + str(0) + "," + "%.18e"%wigxjpf_wrapper(j1, j2, j, m) + "\n")
 
-                    
-                    
+
 def generate_random_test_cases(num_cases, maxj12, f_handle):
-
-    import random
-
     for i in range(num_cases):
         j1 = random.randint(0, maxj12)
         j2 = random.randint(0, maxj12)
@@ -42,21 +45,20 @@ def generate_random_test_cases(num_cases, maxj12, f_handle):
         j = random.randrange(j_max - j_min, j_max + j_min + 1)
         m = random.choice((0, 2))
         f_handle.write(str(j1) + "," + str(j2) + "," + str(j) + "," + str(m) + "," + str(-m) + "," + str(0) + "," + "%.18e" % wigxjpf_wrapper(j1, j2, j, m) + "\n")
-    
-    
+
+
 def test_file_name():
     return "./test_UCLWig3j.txt"
-    
-    
+
+
 def generate_all_test_cases():
     with open(test_file_name(), "w") as f_handle:
         generate_test_cases(25, f_handle)
         generate_random_test_cases(20000, 10000, f_handle)
-        
+
 
 # Assumes that parameter_tuple is an 8-tuple containing: j1, j2, j, m, correct wig3j, our calculated wig3j, absolute error, percentage error.
 def parameters_to_str(parameter_tuple):
-    
     return "j1 = " + str(parameter_tuple[0]) + "; j2 = " + str(parameter_tuple[1]) + "; j = " + str(parameter_tuple[2]) + "; m = " + str(parameter_tuple[3]) + "; correct wig3j = " + "{0:.17e}".format(parameter_tuple[4]) + "; our calculated wig3j = " + "{0:.17e}".format(parameter_tuple[5]) + "; absolute error = " + str(parameter_tuple[6]) + "; percentage error = " + str(parameter_tuple[7])
 
 
@@ -71,15 +73,14 @@ def lines_in_file(filename):
             lines += buf.count('\n')
             buf = read_f(buf_size)
     return lines
-      
-        
+
+
 def run_all_test_cases():
-    
     max_absolute_error = (0, 0, 0, 0, 0, 0, 0, 0.0)
     max_percentage_error = (0, 0, 0, 0, 0, 0, 0, 0.0)
     max_absolute_error_when_correct_value_is_zero = (0, 0, 0, 0, 0, 0, 0, 0.0)
     
-    print "Running..."
+    print("Running...")
     
     # To provide a running status update
     lines = lines_in_file(test_file_name())
@@ -119,40 +120,32 @@ def run_all_test_cases():
                 old_percentage_read = percentage_read
             
                 
-    print "\n"
+    print("\n")
     
-    print "Maximum absolute error:"
-    print parameters_to_str(max_absolute_error)
+    print("Maximum absolute error:")
+    print(parameters_to_str(max_absolute_error))
             
-    print "Maximum percentage error:"
-    print parameters_to_str(max_percentage_error)
+    print("Maximum percentage error:")
+    print(parameters_to_str(max_percentage_error))
             
-    print "Maximum absolute error when correct value is zero:"
-    print parameters_to_str(max_absolute_error_when_correct_value_is_zero)
-            
+    print("Maximum absolute error when correct value is zero:")
+    print(parameters_to_str(max_absolute_error_when_correct_value_is_zero))
 
 
-
-
-
-	
 # MAIN PROCEDURE STARTS HERE
 
 if __name__ == "__main__":
 
-    import sys
-    
     usage_string = "Usage: 'test_UCLWig3j.py generate' or 'test_UCLWig3j.py run'"
     
     if len(sys.argv) != 2:
-        print usage_string
+        print(usage_string)
     else:
         if sys.argv[1] == "generate":
             generate_all_test_cases()
         elif sys.argv[1] == "run":
             run_all_test_cases()
         else:
-            print usage_string
+            print(usage_string)
 
-            
-            
+

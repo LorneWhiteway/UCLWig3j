@@ -49,7 +49,7 @@ uclwig3j::uclwig3j(j1, j2, m, array.begin());
 
 To run the test code:
 1. Call `make`; this will build an executable `run_UCLWig3j`. (If you want to call this executable directly yourself, then pass on the command line either `j1 j2 j m` (in which case the program will return wig3j(j1, j2, j, m, -m, 0)) or `j1 j2 m` (in which case the program will return a complete list of j and wig3j(j1, j2, j, m, -m, 0) values as well as information on how long the calculation took.)
-2. Call the Python 2 module `test_UCLWig3j.py` with the command line parameter `run`. This will read the provided file 'test_UCLWig3j.txt' (which contains precomputed correct values for wig3j, calculated using wigxjpf (see http://fy.chalmers.se/subatom/wigxjpf/)) and then summarise the maximum absolute error and maximum percentage error between the correct values and the uclwig3j values.
+2. Call the Python 3 module `test_UCLWig3j.py` with the command line parameter `run`. This will read the provided file 'test_UCLWig3j.txt' (which contains precomputed correct values for wig3j, calculated using wigxjpf (see http://fy.chalmers.se/subatom/wigxjpf/)) and then summarise the maximum absolute error and maximum percentage error between the correct values and the uclwig3j values.
 
 ## Test results
 
