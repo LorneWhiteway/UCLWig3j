@@ -1,0 +1,267 @@
+% !TEX TS-program = pdflatex+MakeIndex+BibTeX
+% !TEX encoding = UTF-8 Unicode
+
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% PAGE DIMENSIONS
+\usepackage[margin=3cm]{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage[usenames,dvipsnames,table]{xcolor} % Colour cells of a table
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage[lofdepth,lotdepth]{subfig} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{amsmath,amsfonts,amssymb} % To allow multline
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{textcomp}
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+\usepackage[nottoc,numbib]{tocbibind} % References in TOC
+
+%\usepackage{setspace} %Line spacing. See https://en.wikibooks.org/wiki/LaTeX/Text_Formatting#Line_Spacing
+%\onehalfspacing
+
+\newcommand{\symthreejarray}[6]{{\left( \begin{array}{ccc} #1 & #2 & #3 \\ #4 & #5 & #6 \end{array} \right)} }
+\DeclareMathOperator{\threej}{w}
+\newcommand{\bb}[1]{\mathbb{#1}}
+
+
+\title{UCLWig3j Theory}
+\author{Lorne Whiteway, UCL}
+\date{9 April 2021}
+
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+We seek an efficient calculation of the Wigner 3j symbol for a restricted range of inputs.
+
+\section{Definition and Properties}
+
+The Wigner 3j symbol is defined to be
+
+\begin{multline}
+\label{eq_symthreejarray_definition}
+\symthreejarray{a}{b}{c}{\alpha}{\beta}{\gamma} = (-1)^{(a-b-\gamma)} \sqrt{\Delta(a,b,c)} \\
+\times \sqrt{(a + \alpha)! (a - \alpha)! (b + \beta)! (b - \beta)! (c + \gamma)! (c - \gamma)!}  \times \sum_{t}{\frac{(-1)^t}{x(t)}}.
+\end{multline}
+
+\noindent Here the sum is over all values of $t$ for which all the arguments to the factorials in
+\begin{equation}
+x(t) = t! (c-b+t+\alpha)! (c-a+t-\beta)! (a+b-c-t)! (b-t+\beta)! (a-t-\alpha)!
+\end{equation}
+are non-negative, while
+\begin{equation}
+\Delta(a,b,c) = \frac{(a+b-c)! (a-b+c)! (-a+b+c)!}{(a+b+c+1)!}
+\end{equation}
+is the \textit{triangle coefficient}.
+
+The Wigner 3j symbol is unchanged under an even permutation of the columns, e.g.
+\begin{equation}
+\label{eq_even_symmetry}
+\symthreejarray{a}{b}{c}{\alpha}{\beta}{\gamma} = \symthreejarray{c}{a}{b}{\gamma}{\alpha}{\beta};
+\end{equation}
+while an odd permutation of the columns introduces a phase factor, e.g.
+\begin{equation}
+\label{eq_odd_symmetry}
+\symthreejarray{a}{b}{c}{\alpha}{\beta}{\gamma} = (-1)^{(a+b+c)}\symthreejarray{b}{a}{c}{\beta}{\alpha}{\gamma}.
+\end{equation}
+There are several other symmetries as well, but we will not need these.
+
+We seek to calculate the restricted version 
+\begin{equation}
+\threej(j) \equiv \symthreejarray{j_1}{j_2}{j}{m}{-m}{0}
+\end{equation}
+where $j_1$ and $j_2$ are non-negative integers, $m$ is 0 or 2, and $j$ steps through the range of values $|j_1 - j_2| \le j \le j_1 + j_2$. When writing $\threej(j)$ the dependence on $j_1$, $j_2$ and $m$ is to be understood.
+
+Let $g = \max(j_1, j_2)$ and $h = \min(j_1, j_2)$. Expressions that are symmetric in $j_1$ and $j_2$ may then be written in terms of $g$ and $h$; for example, $j_1 + j_2 = g + h$, while the constraint on $j$ becomes $g-h \le j \le g+h$. We will make such substitutions without further comment.
+
+Our goal is to calculate $\threej(j)$ for the full range of $j$ values $g-h \le j \le g+h$; we are helped here by the recursion relation that links three successive values of $\threej$:
+\begin{equation}
+(j-1) A(j)\threej(j) + B(j-1)\threej(j-1) + jA(j-1)\threej(j-2) = 0
+\end{equation}
+where
+\begin{equation}
+\begin{split}
+A(k) &= k \sqrt{k^2 - (j_1-j_2)^2} \sqrt{(j_1+j_2+1)^2 - k^2} \\
+&= k \sqrt{k^2 - (g-h)^2} \sqrt{(g+h+1)^2 - k^2} \\
+\end{split}
+\end{equation}
+and
+\begin{equation}
+B(k) = -2mk(2k+1)(k+1).
+\end{equation}
+
+\noindent For this result see for example equations 1(b), 1(c) and 1(d) in Schulten and Gordon (Computer Physics Communications 11 (1976) 269-278). The notation in that paper and in this note may be equated by using Eq \ref{eq_even_symmetry}.
+
+Our strategy is to calculate the 3j symbol first for the lowest and second-lowest values of $j$, and then to apply the recursion relation to calculate the 3j symbol for higher values of $j$.
+
+\section{$j = g-h$}
+
+Assume that $j$ has its lowest value i.e. $j = g-h$. We see
+\begin{equation}
+x(t) = t! (-h+t+m)! (g-2h+t+m)! (2h-t)! (g-t-m)! (h-t-m)!
+\end{equation}
+Recall that all factorial arguments must be non-negative. The second and last factors together then force $t=h-m$; if this quantity is non-negative then we see that all the factorial arguments will be non-negative and so this will be the unique value of $t$; if this quantity is negative then no $t$ values are allowed and $\threej(j)$ will be zero.
+
+\subsection{$h-m \ge 0$}
+Assuming then that $t=h-m \ge 0$, we calculate
+\begin{equation}
+x(t) = (h-m)! (g-h)! (h+m)! (g-h)!
+\end{equation}
+
+The triangle coefficient becomes:
+\begin{equation}
+\begin{split}
+\Delta(j_1,j_2,j) &= \frac{(j_1+j_2-j)! (j_1-j_2+j)! (-j_1 + j_2 +j)!}{(j_1+j_2+j + 1)!} \\
+&= \frac{(2h)! (2g-2h)!}{(2g+1)!}.
+\end{split}
+\end{equation}
+
+Combining yields
+\begin{multline}
+\threej(j) = (-1)^{(j_1-j_2)} \times \sqrt{\frac{(2h)! (2g-2h)!}{(2g+1)!}} \times \\
+\sqrt{(g+m)!(g-m)!(h+m)!(h-m)!(g-h)!(g-h)!} \times \\
+\frac{(-1)^{(h-m)}}{(h-m)! (g-h)! (h+m)! (g-h)!}
+\end{multline}
+
+Now $m$ is even, so the sign on the right hand side may be simplified by noting that $j_1 - j_2 + h - m \equiv |j_1 - j_2| + h \equiv g-h+h \equiv g \mod 2$. Thus
+\begin{equation}
+\begin{split}
+w(j) &= (-1)^{g} \sqrt{\frac{(2h)!(2g-2h)!}{(2g+1)!} \frac{(g-m)!}{(h-m)!(g-h)!} \frac{(g+m)!}{(h+m)!(g-h)!}} \\
+&=\frac{(-1)^{g}}{\sqrt{2g+1}} \prod_{i=1}^{g-h} \sqrt{\left(\frac{2i-1}{2h+2i-1}\right) \left(\frac{2i}{2h+2i}\right) \left(\frac{h-m+i}{i}\right) \left(\frac{h+m+i}{i}\right)} \\
+&=\frac{(-1)^{g}}{\sqrt{2g+1}} \prod_{i=1}^{g-h} \sqrt{\left(\frac{2i-1}{i}\right) \left(\frac{2i}{i}\right) \left(\frac{h-m+i}{2h+2i-1}\right) \left(\frac{h+m+i}{2h+2i}\right)} .
+\end{split}
+\end{equation}
+
+\subsection{$h-m < 0$}
+Alternatively if $h-m < 0$ then in this case there are no valid $t$ values and so
+\begin{equation}
+\symthreejarray{j_1}{j_2}{j}{m}{-m}{0} = 0.
+\end{equation}
+
+\section{$j = g-h+1$}
+
+Assume that $j$ has its second-lowest value i.e. $j = g-h+1$. Here the third item $\threej(j-2)$ in the recursion equation is not defined (as $(j-2) < g-h$ in this case); however the recursion relation still holds provided that we set $\threej(j-2) = 0$. Hence we can solve for $\threej(j)$ in terms of $\threej(j-1)$, but only providing that the prefactor $(j-1)A(j)$ for $\threej(j)$ does not vanish. Actually we need only consider $j-1=0$, as $A(j)$ never vanishes in this case (to see this, note that $A(j) = j \sqrt{j^2 - (g-h)^2} \sqrt{(g+h+1)^2 - j^2}$ and for this to vanish we must have $j=0$, or $j = g-h$, or $j = g+h+1$, none of which are possible given that $j = g-h+1$ and $j \le g+h$). Thus the only case that needs special handling is $j-1=0$ i.e. $j=1$; all other cases may be handled using the recursion formula.
+
+\subsection{$j=1$}
+
+Now $j=1$ and $j=g-h+1$ together imply $g=h$ and hence $j_1 = j_2$; we will use $J$ to denote the common value of $j_1$ and $j_2$ and note that $j \le g+h$ implies $J \ge 1$. We seek to calculate
+\begin{equation}
+\threej(j) = \threej(1) = \symthreejarray{J}{J}{1}{m}{-m}{0} = \symthreejarray{1}{J}{J}{0}{m}{-m}
+\end{equation}
+where the final equality follows from Eq. \ref{eq_even_symmetry}. We apply Eq. \ref{eq_symthreejarray_definition} to the right-hand symbol. In this case
+\begin{equation}
+x(t) = t! t! (J-1+t-m)! (1-t)! (J+m-t)! (1-t)!
+\end{equation}
+To have non-negative factorial arguments we must have $t=0$ or $t=1$ (others are ruled out by the first or final factorial). We calculate:
+\begin{equation}
+x(0) = (J-1-m)!(J+m)! \qquad x(1) = (J-m)!(J+m-1)! 
+\end{equation}
+and from this we see that there will be both solutions if $m=0$ or if $m=2$ and $J \ge 3$, one solution ($t=1$) if $m=2$ and $J = 2$, and no solutions if $m=2$ and $J \le 1$.
+
+\subsubsection{$m=0$}
+
+We see
+\begin{equation}
+\threej(j) = \threej(1) = \symthreejarray{J}{J}{1}{0}{0}{0} = -\symthreejarray{J}{J}{1}{0}{0}{0}
+\end{equation}
+where in the final equality we have exchanged the first two columns and applied Eq \ref{eq_odd_symmetry}. Thus
+\begin{equation}
+\label{eq_second_m_zero_value}
+\threej(j) = 0.
+\end{equation}
+
+\subsubsection{$m=2$ and $J \ge 3$}
+
+Here we use Eq \ref{eq_symthreejarray_definition} with $t=0$ and $t=1$ to calculate:
+
+\begin{equation}
+\begin{split}
+\threej(j) = \symthreejarray{1}{J}{J}{0}{2}{-2} &= (-1)^{(1-J+2)} \sqrt{\frac{(2J-1)!}{(2J+2)!}} \times (J+2)! (J-2)! \\
+&\qquad \times \left( \frac{1}{(J-3)! (J+2)!} - \frac{1}{(J-2)! (J+1)!} \right) \\
+&= (-1)^{(1-J)} \sqrt{\frac{(2J-1)!}{(2J+2)!}} \times \left( \frac{(J-2)!}{(J-3)!} - \frac{(J+2)!}{(J+1)!} \right) \\
+&= 4 (-1)^{J} \sqrt{\frac{(2J-1)!}{(2J+2)!}} \\
+&= 2 (-1)^{J} \sqrt{\frac{1}{J(J+1)(2J+1)}}. \\
+\end{split}
+\end{equation}
+
+\subsubsection{$m=2$ and $J = 2$}
+
+Here we use Eq \ref{eq_symthreejarray_definition} with $t=1$ to calculate:
+
+\begin{equation}
+\begin{split}
+\threej(j) = \symthreejarray{1}{J}{J}{0}{2}{-2} &= (-1)^{(1-J+2)} \sqrt{\frac{(2J-1)!}{(2J+2)!}} \times (J+2)! (J-2)! \\
+&\qquad \times \left( - \frac{1}{(J-2)! (J+1)!} \right) \\
+&= (-1)^{J} \sqrt{\frac{(2J-1)!}{(2J+2)!}} \frac{(J+2)!}{(J+1)!} \\
+&= 4 (-1)^{J} \sqrt{\frac{(2J-1)!}{(2J+2)!}}  \qquad \qquad \textrm{(as $J=2$)}\\
+&= 2 (-1)^{J} \sqrt{\frac{1}{J(J+1)(2J+1)}}. \\
+\end{split}
+\end{equation}
+Note that by coincidence this matches the formula for the $m=2$ and $J \ge 3$ case.
+
+
+\subsubsection{$m=2$ and $J \le 1$}
+
+In this case there are no valid values of $t$ and hence $\threej(j) = 0$.
+
+\subsection{$j>1$}
+
+In this case the recursion formula may be applied to calculate:
+\begin{equation}
+\begin{split}
+\threej(j) &= - \frac{B(j-1)}{(j-1)A(j)} \threej(j-1) \\
+&= \frac{2m (2(g-h+1)-1)}{\sqrt{(g-h+1)^2-(g-h)^2} \sqrt{(g+h+1)^2-(g-h+1)^2}} \threej(j-1) \\
+&= \frac{m (2g-2h+1))}{\sqrt{2g-2h+1} \sqrt{h(g+1)}} \threej(j-1) \\
+&= m \sqrt{\frac{2g-2h+1}{h(g+1)}} \threej(j-1) \\
+\end{split}
+\end{equation}
+
+Note that when $m=0$ we have $\threej(j) = 0$.
+
+\section{$j > g-h+1$}
+
+Here we may use the recursion to compute:
+\begin{equation}
+\threej(j) = - \frac{1}{(j-1)A(j)} \left(B(j-1)\threej(j-1) + jA(j-1)\threej(j-2) \right) \\
+\end{equation}
+with
+\begin{equation}
+\begin{split}
+B(j-1) &= -2mj(j-1)(2j-1)  \\
+A(j-1) &= (j-1) \sqrt{(j-1)^2 - (g-h)^2} \sqrt{(g+h+1)^2-(j-1)^2} \\
+&= (j-1) \sqrt{(j-1-g+h)(j-1+g-h)(g+h+2-j)(g+h+j)} \\
+A(j) &= j \sqrt{j^2 - (g-h)^2} \sqrt{(g+h+1)^2-j^2} \\
+&= j \sqrt{(j-g+h)(j+g-h)(g+h+1-j)(g+h+1+j)} \\
+\end{split}
+\end{equation}
+After cancelling common factors of $j$ and $j-1$ we have
+\begin{multline}
+\threej(j) = \frac{2m(2j-1)}{\sqrt{(j-g+h)(j+g-h)(g+h+1-j)(g+h+1+j)}} \threej(j-1) \\
+- \sqrt{{\left(\frac{j-1-g+h}{j-g+h} \right)} {\left(\frac{j-1+g-h}{j+g-h} \right)} {\left(\frac{g+h+2-j}{g+h+1-j} \right)} {\left(\frac{g+h+j}{g+h+1+j} \right)}} \threej(j-2)
+\end{multline}
+
+When $m=0$ we see that the first term on the right vanishes. Coupled with Eq \ref{eq_second_m_zero_value} this implies that every second $\threej(j)$ (starting with the second one) vanishes.
+
+\end{document}
+
