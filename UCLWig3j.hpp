@@ -3,21 +3,21 @@
 
 #include <cmath>
 
-// Comments below refer to 'my notes'; contact lorne.whiteway@star.ucl.ac.uk to see these.
+// Comments in the code refer to the document UCLWig3j_Theory included in the repository.
 
 namespace uclwig3j {
 
-    // Calculates wig3j(j1, j2, j, m, -m, 0) in this starting case in which j=abs(j1-j2).
-    // See my notes p. E20 for the m = 0 case.
+    // Calculate wig3j(j1, j2, j, m, -m, 0) in the starting case in which j=abs(j1-j2).
     template <class TIter> void initial_value(unsigned int j12_max, unsigned int j12_min, unsigned int m, TIter target) {
         
         unsigned int j12_diff = j12_max - j12_min;
         
-        // Special case. See my notes p. 68
         if (m == 2 && j12_min < 2) {
+            // See equation 15.
             *target = 0.0;
         }
         else {
+            // See equation 14.
             double sym_3j = 1.0;
             double factor1 = 1.0;
             double factor2 = 1.0;
@@ -36,8 +36,6 @@ namespace uclwig3j {
             
             sym_3j /= (2 * j12_max + 1.0);
             sym_3j = std::sqrt(sym_3j);
-            
-            // Set the sign.
             sym_3j *= ((j12_max % 2 == 0) ? 1.0 : -1.0);
             
             *target = sym_3j;
@@ -45,26 +43,28 @@ namespace uclwig3j {
         
     }
 
+    // Calculate wig3j(j1, j2, j, m, -m, 0) in the 'next after starting case' in which j=abs(j1-j2)+1.
     template <class TIter> void second_value(unsigned int j12_max, unsigned int j12_min, unsigned int m, double initial_value, TIter target) {
         
         unsigned int j12_diff = j12_max - j12_min;
         
         if (m == 0) {
+            // See equation 20.
             *target = 0.0;
         }
         else {
             if (j12_diff == 0) {
-                // Calculate wig3j(j1, j2, 1, 2, -2, 0) - The general formula doesn't work here. See p. 60 for explanation, and p. 63 for the required formula.
                 if (j12_max == 1) {
+                    // See section 4.1.4.
                     *target =  0.0;
                 }
                 else {
-                    // By chance this formula works for j12_max = 2 as well as for j12_max > 2 (different derivations of the formula required in these two cases. See p. 65.)
+                    // By chance this formula works for both j12_max = 2 (equation 22) and j12_max > 2 (equation 21).
                     *target =  ((j12_max % 2 == 0) ? 1.0 : -1.0) * 2.0 / std::sqrt(j12_max * (j12_max + 1.0) * (2.0 * j12_max + 1.0));
                 }
             }
             else {
-                // See p. 81.
+                // See equation 23.
                 *target =  initial_value * 2.0 * std::sqrt((2.0 * j12_diff + 1.0) / (j12_min * (j12_max + 1.0)));
             }
         }
@@ -100,8 +100,10 @@ namespace uclwig3j {
             
             for (; j <= j12_sum; j += 2, f1 += 2, f2 += 2, f3 += 2, f4 -= 2 /*'it' is incremented in the loop body*/) {
                 
+                // See the comment after equation 26.
                 *(it++) = 0.0; // This refers to j-1...
                 
+                // See equation 26.
                 double factor = (f1 / (f1 + 1.0)) * (f2 / (f2 + 1.0)) * (f3 / (f3 + 1.0)) * ((f4 + 1.0) / f4);
                 factor = -std::sqrt(factor);
                 sym_3j *= factor;
@@ -115,14 +117,14 @@ namespace uclwig3j {
             double starting_value;
             initial_value(j12_max, j12_min, m, &starting_value);
             *(it++) = starting_value;
-            // Second value:
+            // Second value (not needed if j12_min == 0 as in this case the starting value is the only legal j value):
             if (j12_min > 0) {
                 second_value(j12_max, j12_min, m, starting_value, it++);
             }
             // Third and remaining values:
             for (unsigned int j = j12_diff + 2; j <= j12_sum; ++j /*'it' is incremented in the loop body*/) {
                 
-                // See p. 82
+                // See equation 26.
                 double factor = 1.0 / std::sqrt(double(j - j12_diff) * (j + j12_diff) * (j12_sum + 1 - j) * (j12_sum + 1 + j));
                 double coeff1 = 4.0 * (2.0 * j - 1.0) * factor;
                 double coeff2 = -1.0 * std::sqrt(double(j - 1.0 - j12_diff) * (j - 1.0 + j12_diff) * (j12_sum + j) * (j12_sum + 2.0 - j)) * factor;
