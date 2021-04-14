@@ -35,8 +35,7 @@
 
 \usepackage[nottoc,numbib]{tocbibind} % References in TOC
 
-%\usepackage{setspace} %Line spacing. See https://en.wikibooks.org/wiki/LaTeX/Text_Formatting#Line_Spacing
-%\onehalfspacing
+
 
 \newcommand{\symthreejarray}[6]{{\left( \begin{array}{ccc} #1 & #2 & #3 \\ #4 & #5 & #6 \end{array} \right)} }
 \DeclareMathOperator{\threej}{w}
@@ -45,7 +44,7 @@
 
 \title{UCLWig3j Theory}
 \author{Lorne Whiteway, UCL}
-\date{9 April 2021}
+\date{14 April 2021}
 
 
 \begin{document}
@@ -75,17 +74,17 @@ are non-negative, while
 \end{equation}
 is the \textit{triangle coefficient}.
 
-The Wigner 3j symbol is unchanged under an even permutation of the columns, e.g.
+An even permutation of the columns of the Wigner 3j symbol leaves the value unchanged, e.g.
 \begin{equation}
 \label{eq_even_symmetry}
 \symthreejarray{a}{b}{c}{\alpha}{\beta}{\gamma} = \symthreejarray{c}{a}{b}{\gamma}{\alpha}{\beta};
 \end{equation}
-while an odd permutation of the columns introduces a phase factor, e.g.
+an odd permutation of the columns introduces a phase factor, e.g.
 \begin{equation}
 \label{eq_odd_symmetry}
 \symthreejarray{a}{b}{c}{\alpha}{\beta}{\gamma} = (-1)^{(a+b+c)}\symthreejarray{b}{a}{c}{\beta}{\alpha}{\gamma}.
 \end{equation}
-There are several other symmetries as well, but we will not need these.
+There are several additional symmetries that we will not need.
 
 We seek to calculate the restricted version 
 \begin{equation}
