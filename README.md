@@ -10,7 +10,7 @@ See http://mathworld.wolfram.com/Wigner3j-Symbol.html for a definition of the Wi
 
 The expected use case for this code is as described in Appendix A of https://arxiv.org/pdf/astro-ph/0410394.pdf, equations A12 - A17. These equations require the calculation of wig3j(j1, j2, j, m, -m, 0) where j1 and j2 are given non-negative integers, m is 0 or 2, and the integer j runs over all relevant values (i.e. |j1-j2| to j1+j2 inclusive). We assume that j1 and j2 may be as large as 10,000. The calculation of this set of wig3j values may be done efficiently using the recurrence relation described in Schulten and Gorden (Computer Physics Communications 11 (1976) 269-278; http://www-s.ks.uiuc.edu/Publications/Papers/PDF/SCHU76B/SCHU76B.pdf).
 
-## Installation
+## Installation and usage
 
 Begin by cloning the repository at https://github.com/Astrophysics-UCL/UCLWig3j.git; this will create a directory `UCLWig3j`.
 
@@ -44,6 +44,10 @@ unsigned int m = 2;
 std::vector<double> array(2 * ((j1 < j2) ? j1 : j2) + 1);
 uclwig3j::uclwig3j(j1, j2, m, array.begin());
 ```
+
+## Documentation
+
+The algorithm is described in the accompanying document 'UCLWig3j_Theory.pdf'.
 
 ## Testing
 
